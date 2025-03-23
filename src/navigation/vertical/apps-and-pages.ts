@@ -1,6 +1,15 @@
 export default [
   { heading: 'Apps & Pages' },
   {
+    title: 'Inventory',
+    icon: { icon: 'tabler-package' },
+    children: [
+      { title: 'Products', to: 'inventory-products' },
+      { title: 'Stock Movement', to: 'inventory-stock-movements' },
+      { title: 'Product Categories', to: 'inventory-product-categories' },
+    ],
+  },
+  {
     title: 'Ecommerce',
     icon: { icon: 'tabler-shopping-cart' },
     children: [

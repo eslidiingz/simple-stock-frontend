@@ -11,4 +11,19 @@ export const $api = ofetch.create({
       }
     }
   },
+  async onResponseError({ request, response, error }) {
+    console.error('API Error:', {
+      url: request,
+      status: response?.status,
+      message: error?.message,
+    })
+
+    if (response?.status === 401) {
+      const router = useRouter()
+      const accessToken = useCookie('accessToken')
+
+      accessToken.value = null
+      router.replace('/login')
+    }
+  },
 })

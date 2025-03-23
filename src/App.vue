@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
+import Toast from '@/components/Toast.vue'
 import BuyNow from '@core/components/BuyNow.vue'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import initCore from '@core/initCore'
 import { initConfigStore, useConfigStore } from '@core/stores/config'
 import { hexToRgb } from '@layouts/utils'
 
+import { useToastStore } from '@/stores/toast'
+
 const { global } = useTheme()
+const toast = useToastStore()
 
 // ℹ️ Sync current theme with initial loader theme
 initCore()
@@ -24,4 +28,10 @@ const configStore = useConfigStore()
       <ScrollToTop />
     </VApp>
   </VLocaleProvider>
+
+  <Toast
+    v-model:visible="toast.visible"
+    :text="toast.message"
+    :status="toast.status"
+  />
 </template>

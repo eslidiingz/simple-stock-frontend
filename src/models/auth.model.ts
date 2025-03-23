@@ -7,8 +7,6 @@ interface Register extends Login {
   email: string
 }
 
-const BASE_API = 'http://localhost:8000/api'
-
 export const signUp = async (credentials: Register) => {
   const uri = `${BASE_API}/auth/sign-up`
   try {
