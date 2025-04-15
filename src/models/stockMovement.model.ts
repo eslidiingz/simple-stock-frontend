@@ -12,8 +12,8 @@ export interface StockMovement {
 }
 
 export enum MovementType {
-  STOCK_IN = 'stock_in',
-  STOCK_OUT = 'stock_out',
+  STOCK_IN = 'STOCK_IN',
+  STOCK_OUT = 'STOCK_OUT',
 }
 
 export interface StockMovementCreate {

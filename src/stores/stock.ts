@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia'
 import type { Product } from '@/models/product.model'
 
+interface ProductImportItem extends Product {
+  product_id: string
+  quantity: number
+}
+
 export const useStockStore = defineStore('stock', {
   state: () => ({
-    list: [],
+    list: [] as ProductImportItem[],
   }),
 
   actions: {
     addToList(product: Product) {
       if (this.list.some((p: Product) => p.id === product.id)) {
-        this.list = this.list.map((p: Product) => {
+        this.list = this.list.map((p: ProductImportItem) => {
           if (p.id === product.id)
             p.quantity += 1
 
@@ -21,8 +26,8 @@ export const useStockStore = defineStore('stock', {
       }
     },
 
-    removeFromList(product: Product) {
-      this.list = this.list.filter((p: Product) => p.id !== product.id)
+    removeFromList(product: ProductImportItem) {
+      this.list = this.list.filter((p: ProductImportItem) => p.id !== product.id)
     },
 
     clear() {

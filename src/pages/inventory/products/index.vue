@@ -191,11 +191,11 @@ watch(searchQuery, newValue => {
         <template #item.product="{ item }">
           <div class="d-flex align-center gap-x-4">
             <VAvatar
-              v-if="item.image"
+              v-if="item.thumbnail"
               size="38"
               variant="tonal"
               rounded
-              :image="imageUrl(item.image)"
+              :image="imageUrl(item.thumbnail)"
             />
 
             <div class="d-flex flex-column">

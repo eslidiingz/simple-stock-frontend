@@ -47,6 +47,10 @@ const totalItem = computed(() => stockMovementsData.value.pagination.total)
 
         <div class="d-flex flex-column">
           <span class="text-body-1 font-weight-medium text-high-emphasis">{{ item.product?.name }}</span>
+          <div class="text-body-2">
+            <span>{{ item.productBrand }}</span>
+            <span class="text-caption">{{ item?.product.code }}</span>
+          </div>
         </div>
       </div>
     </template>

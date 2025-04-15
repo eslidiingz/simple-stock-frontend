@@ -1,15 +1,6 @@
 export default [
   { heading: 'Apps & Pages' },
   {
-    title: 'Inventory',
-    icon: { icon: 'tabler-package' },
-    children: [
-      { title: 'Products', to: 'inventory-products' },
-      { title: 'Stock Movement', to: 'inventory-stock-movements' },
-      { title: 'Product Categories', to: 'inventory-product-categories' },
-    ],
-  },
-  {
     title: 'Ecommerce',
     icon: { icon: 'tabler-shopping-cart' },
     children: [
@@ -17,6 +8,19 @@ export default [
         title: 'Dashboard',
         to: 'apps-ecommerce-dashboard',
       },
+      {
+        title: 'Sale',
+        to: 'ecommerce-sale',
+      },
+      {
+        title: 'Order',
+        to: 'ecommerce-orders',
+      },
+      {
+        title: 'Setting',
+        to: 'ecommerce-settings',
+      },
+
       {
         title: 'Product',
         children: [
@@ -32,6 +36,7 @@ export default [
           { title: 'Details', to: { name: 'apps-ecommerce-order-details-id', params: { id: '9042' } } },
         ],
       },
+
       {
         title: 'Customer',
         children: [
@@ -47,10 +52,16 @@ export default [
         title: 'Referrals',
         to: 'apps-ecommerce-referrals',
       },
-      {
-        title: 'Settings',
-        to: 'apps-ecommerce-settings',
-      },
+
+    ],
+  },
+  {
+    title: 'Inventory',
+    icon: { icon: 'tabler-package' },
+    children: [
+      { title: 'Products', to: 'inventory-products' },
+      { title: 'Stock Movement', to: 'inventory-stock-movements' },
+      { title: 'Product Categories', to: 'inventory-product-categories' },
     ],
   },
   {

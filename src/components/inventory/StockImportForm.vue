@@ -25,7 +25,7 @@ const addToList = async () => {
       v-model="barcode"
       prepend-inner-icon="tabler-barcode"
     />
-    <VBtn :disabled="barcode === ''">
+    <VBtn type="submit" :disabled="barcode === ''">
       <VIcon
         start
         icon="tabler-copy-plus"

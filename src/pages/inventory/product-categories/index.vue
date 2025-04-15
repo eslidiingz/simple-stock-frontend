@@ -5,9 +5,9 @@ import { CreateProductCategory, DeleteProductCategory, type ProductCategory, Upd
 
 const headers = [
   { title: 'Categories', key: 'name', sortable: false },
-  { title: 'Products', key: '_count.products', sortable: false },
+  // { title: 'Products', key: '_count.products', sortable: false },
   { title: 'Status', key: 'is_active', sortable: false, align: 'center' },
-  { title: 'Actions', key: 'actions', sortable: false, align: 'end' },
+  // { title: 'Actions', key: 'actions', sortable: false, align: 'end' },
 ]
 
 const mode = ref<ModeType>(ModeType.CREATE)
@@ -193,7 +193,7 @@ watch(searchQuery, newValue => {
         </template>
 
         <!-- Actions -->
-        <template #item.actions="{ item }">
+        <!-- <template #item.actions="{ item }">
           <IconBtn @click="onEditProduct(item)">
             <VIcon icon="tabler-edit" />
           </IconBtn>
@@ -206,7 +206,7 @@ watch(searchQuery, newValue => {
               size="22"
             />
           </IconBtn>
-        </template>
+        </template> -->
 
         <!-- pagination -->
         <template #bottom>
