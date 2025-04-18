@@ -91,6 +91,7 @@ declare module 'vue-router/auto/routes' {
     'dashboards-crm': RouteRecordInfo<'dashboards-crm', '/dashboards/crm', Record<never, never>, Record<never, never>>,
     'dashboards-ecommerce': RouteRecordInfo<'dashboards-ecommerce', '/dashboards/ecommerce', Record<never, never>, Record<never, never>>,
     'ecommerce-orders': RouteRecordInfo<'ecommerce-orders', '/ecommerce/orders', Record<never, never>, Record<never, never>>,
+    'ecommerce-orders-id': RouteRecordInfo<'ecommerce-orders-id', '/ecommerce/orders/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'ecommerce-sale': RouteRecordInfo<'ecommerce-sale', '/ecommerce/sale', Record<never, never>, Record<never, never>>,
     'ecommerce-settings': RouteRecordInfo<'ecommerce-settings', '/ecommerce/settings', Record<never, never>, Record<never, never>>,
     'extensions-swiper': RouteRecordInfo<'extensions-swiper', '/extensions/swiper', Record<never, never>, Record<never, never>>,

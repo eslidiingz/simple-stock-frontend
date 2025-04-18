@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { isToday } from './helpers'
 
 export const avatarText = (value: string) => {
@@ -22,11 +23,19 @@ export const kFormatter = (num: number) => {
  * @param {string} value date to format
  * @param {Intl.DateTimeFormatOptions} formatting Intl object to format with
  */
-export const formatDate = (value: string, formatting: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }) => {
-  if (!value)
-    return value
+// export const formatDate = (value: string, formatting: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }) => {
+//   if (!value)
+//     return value
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+//   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+// }
+
+/**
+ * Customer format date via dayjs
+ * Dayjs docs: https://day.js.org/docs/en/display/format
+ */
+export const formatDate = (date: string | number | Date | dayjs.Dayjs, formatStr: string = 'DD, MMM YYYY, HH:mm') => {
+  return dayjs(date).format(formatStr)
 }
 
 /**

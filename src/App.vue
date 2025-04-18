@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
+import { useDialogStore } from './stores/dialog'
 import Toast from '@/components/Toast.vue'
 import BuyNow from '@core/components/BuyNow.vue'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
@@ -11,6 +12,7 @@ import { useToastStore } from '@/stores/toast'
 
 const { global } = useTheme()
 const toast = useToastStore()
+const dialog = useDialogStore()
 
 // ℹ️ Sync current theme with initial loader theme
 initCore()
@@ -34,4 +36,11 @@ const configStore = useConfigStore()
     :text="toast.message"
     :status="toast.status"
   />
+
+  <ConfirmDialog
+    v-model:isDialogVisible="dialog.confirm.isVisible"
+    :confirmation-question="dialog.confirm.message"
+  />
+
+  <Dialog v-model:isDialogVisible="dialog.normal.isVisible" />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { OrderPaymentStatus, OrderStatus } from '@/models/order.model'
+import { resolveOrderPaymentStatus, resolveOrderStatus } from '@/models/order.model'
 import type { Order } from '@db/apps/ecommerce/types'
 import masterCardDark from '@images/icons/payments/img/master-dark.png'
 import masterCardLight from '@images/icons/payments/img/mastercard.png'
@@ -43,50 +43,20 @@ const paypal = useGenerateImageVariant(paypalLight, paypalDark)
 // Data table Headers
 const headers = [
   { title: 'Order', key: 'order' },
-  { title: 'Date', key: 'created_at' },
+  { title: 'Product', key: 'product' },
   { title: 'Price', key: 'grand_total' },
   { title: 'Customers', key: 'customers' },
   { title: 'Payment', key: 'payment', sortable: false },
   { title: 'Status', key: 'status' },
   { title: 'Method', key: 'method', sortable: false },
-  { title: 'Action', key: 'actions', sortable: false },
+
+  // { title: 'Action', key: 'actions', sortable: false },
 ]
 
 // Update data table options
 const updateOptions = (options: any) => {
   sortBy.value = options.sortBy[0]?.key
   orderBy.value = options.sortBy[0]?.order
-}
-
-const resolvePaymentStatus = (status: string) => {
-  if (status === OrderPaymentStatus.PAID)
-    return { text: 'Paid', color: 'success' }
-  if (status === OrderPaymentStatus.UNPAID)
-    return { text: 'Unpaid', color: 'secondary' }
-  if (status === OrderPaymentStatus.REFUNDED)
-    return { text: 'Refunded', color: 'error' }
-
-  // if (status === 1)
-  //   return { text: 'Paid', color: 'success' }
-  // if (status === 2)
-  //   return { text: 'Pending', color: 'warning' }
-  // if (status === 3)
-  //   return { text: 'Cancelled', color: 'secondary' }
-  // if (status === 4)
-  //   return { text: 'Failed', color: 'error' }
-}
-
-const resolveStatus = (status: string) => {
-  if (status === OrderStatus.PENDING)
-    return { text: 'Pending', color: 'warning' }
-  if (status === 'Delivered')
-    return { text: 'Delivered', color: 'success' }
-  if (status === 'Out for Delivery')
-    return { text: 'Out for Delivery', color: 'primary' }
-  if (status === 'Ready to Pickup')
-    return { text: 'Ready to Pickup', color: 'info' }
-  if (status === 'Dispatched')
-    return { text: 'Dispatched', color: 'warning' }
 }
 
 // Delete Orders
@@ -194,23 +164,23 @@ const deleteOrder = async (id: number) => {
         :items="orders"
         item-value="order"
         :items-length="totalItem"
-        show-select
         class="text-no-wrap"
         @update:options="updateOptions"
       >
         <!-- Order ID -->
         <template #item.order="{ item }">
-          {{ item.code }}
-          <!--
-            <RouterLink :to="{ name: 'apps-ecommerce-order-details-id', params: { id: item.order } }">
-            #{{ item.order }}
-            </RouterLink>
-          -->
+          <RouterLink :to="{ name: 'ecommerce-orders-id', params: { id: item.id } }">
+            {{ item.code }}
+          </RouterLink>
+          <small class="d-block">
+            {{ formatDate(item.created_at) }}
+          </small>
         </template>
 
         <!-- Date -->
-        <template #item.created_at="{ item }">
-          {{ formatDate(item.created_at) }}
+        <template #item.product="{ item }">
+          <small class="d-block">{{ item.product_count }} Product</small>
+          <small class="d-block">{{ item.product_count_items }} Items</small>
         </template>
 
         <!-- Order price -->
@@ -221,35 +191,18 @@ const deleteOrder = async (id: number) => {
         <!-- Customers  -->
         <template #item.customers="{ item }">
           <div class="d-flex align-center gap-x-3">
-            <!--
-              <VAvatar
-              size="34"
-              :color="!item.avatar.length ? 'primary' : ''"
-              :variant="!item.avatar.length ? 'tonal' : undefined"
-              >
-              <VImg
-              v-if="item.avatar"
-              :src="item.avatar"
-              />
-
-              <span
-              v-else
-              class="font-weight-medium"
-              >{{ avatarText(item.customer) }}</span>
-              </VAvatar>
-            -->
-
             <div class="d-flex flex-column">
-              <div class="text-body-1 font-weight-medium">
-                <RouterLink
-                  :to="{ name: 'pages-user-profile-tab', params: { tab: 'profile' } }"
-                  class="text-link"
-                >
-                  {{ item.receiver_name }}
-                </RouterLink>
+              <div class="text-body-1 font-weight-black">
+                <VIcon
+                  icon="tabler-user"
+                  size="16"
+                /> {{ item.receiver_name }}
               </div>
               <div class="text-body-2">
-                {{ item.receiver_phone }}
+                <VIcon
+                  icon="tabler-phone"
+                  size="16"
+                /> {{ item.receiver_phone }}
               </div>
             </div>
           </div>
@@ -258,7 +211,7 @@ const deleteOrder = async (id: number) => {
         <!-- Payments -->
         <template #item.payment="{ item }">
           <div
-            :class="`text-${resolvePaymentStatus(item.payment_status)?.color}`"
+            :class="`text-${resolveOrderPaymentStatus(item.payment_status)?.color}`"
             class="font-weight-medium d-flex align-center gap-x-2"
           >
             <VIcon
@@ -266,7 +219,7 @@ const deleteOrder = async (id: number) => {
               size="10"
             />
             <div style="line-height: 22px;">
-              {{ resolvePaymentStatus(item.payment_status)?.text }}
+              {{ resolveOrderPaymentStatus(item.payment_status)?.text }}
             </div>
           </div>
         </template>
@@ -274,7 +227,7 @@ const deleteOrder = async (id: number) => {
         <!-- Status -->
         <template #item.status="{ item }">
           <VChip
-            v-bind="resolveStatus(item.status)"
+            v-bind="resolveOrderStatus(item.status)"
             label
             size="small"
           />
@@ -284,40 +237,33 @@ const deleteOrder = async (id: number) => {
         <template #item.method="{ item }">
           <div class="d-flex align-center">
             {{ item.payment_code }}
-            <!--
-              <img
-              :src="item.method === 'mastercard' ? mastercard : paypal"
-              height="18"
-              >
-              <div class="text-body-1">
-              ...{{ item.method === 'mastercard' ? item.methodNumber : '@gmail.com' }}
-              </div>
-            -->
           </div>
         </template>
 
         <!-- Actions -->
-        <template #item.actions="{ item }">
+        <!--
+          <template #item.actions="{ item }">
           <IconBtn>
-            <VIcon icon="tabler-dots-vertical" />
-            <VMenu activator="parent">
-              <VList>
-                <VListItem
-                  value="view"
-                  :to="{ name: 'apps-ecommerce-order-details-id', params: { id: item.order } }"
-                >
-                  View
-                </VListItem>
-                <VListItem
-                  value="delete"
-                  @click="deleteOrder(item.id)"
-                >
-                  Delete
-                </VListItem>
-              </VList>
-            </VMenu>
+          <VIcon icon="tabler-dots-vertical" />
+          <VMenu activator="parent">
+          <VList>
+          <VListItem
+          value="view"
+          :to="{ name: 'apps-ecommerce-order-details-id', params: { id: item.order } }"
+          >
+          View
+          </VListItem>
+          <VListItem
+          value="delete"
+          @click="deleteOrder(item.id)"
+          >
+          Delete
+          </VListItem>
+          </VList>
+          </VMenu>
           </IconBtn>
-        </template>
+          </template>
+        -->
 
         <!-- pagination -->
         <template #bottom>
