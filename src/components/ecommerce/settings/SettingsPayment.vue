@@ -149,59 +149,61 @@ const updateSelectedPaymentType = paymentType => {
     </VCard>
 
     <!-- Shipping Settings -->
-    <VCard class="mb-6">
+    <!--
+      <VCard class="mb-6">
       <VCardText>
-        <h3 class="text-subtitle-1 font-weight-medium mb-4">
-          Shipping Settings
-        </h3>
+      <h3 class="text-subtitle-1 font-weight-medium mb-4">
+      Shipping Settings
+      </h3>
 
-        <VRow>
-          <VCol
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <VTextField
-              v-model.number="shipping.base_fee"
-              type="number"
-              label="Base Shipping Fee (฿)"
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <VTextField
-              v-model.number="shipping.cod_extra"
-              type="number"
-              label="COD Extra Fee (฿)"
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <VTextField
-              v-model.number="shipping.free_shipping_over"
-              type="number"
-              label="Free Shipping Over (฿)"
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <VTextField
-              v-model="shipping.default_carrier"
-              label="Default Carrier"
-            />
-          </VCol>
-        </VRow>
+      <VRow>
+      <VCol
+      cols="12"
+      sm="6"
+      md="4"
+      >
+      <VTextField
+      v-model.number="shipping.base_fee"
+      type="number"
+      label="Base Shipping Fee (฿)"
+      />
+      </VCol>
+      <VCol
+      cols="12"
+      sm="6"
+      md="4"
+      >
+      <VTextField
+      v-model.number="shipping.cod_extra"
+      type="number"
+      label="COD Extra Fee (฿)"
+      />
+      </VCol>
+      <VCol
+      cols="12"
+      sm="6"
+      md="4"
+      >
+      <VTextField
+      v-model.number="shipping.free_shipping_over"
+      type="number"
+      label="Free Shipping Over (฿)"
+      />
+      </VCol>
+      <VCol
+      cols="12"
+      sm="6"
+      md="4"
+      >
+      <VTextField
+      v-model="shipping.default_carrier"
+      label="Default Carrier"
+      />
+      </VCol>
+      </VRow>
       </VCardText>
-    </VCard>
+      </VCard>
+    -->
 
     <!-- Save Button -->
     <div class="d-flex justify-end">
@@ -212,6 +214,7 @@ const updateSelectedPaymentType = paymentType => {
         <VIcon
           start
           icon="tabler-device-floppy"
+          size="20"
         />
         Save Settings
       </VBtn>

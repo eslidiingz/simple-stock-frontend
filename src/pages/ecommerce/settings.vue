@@ -7,12 +7,13 @@ import SettingsShippingAndDelivery from '@/views/apps/ecommerce/settings/Setting
 import SettingsStoreDetails from '@/views/apps/ecommerce/settings/SettingsStoreDetails.vue'
 
 const tabsData = [
-  { icon: 'tabler-building-store', title: 'Store Details' },
+  // { icon: 'tabler-building-store', title: 'Store Details' },
   { icon: 'tabler-credit-card', title: 'Payments' },
-  { icon: 'tabler-shopping-cart', title: 'Checkout' },
-  { icon: 'tabler-discount', title: 'Shipping & Delivery' },
-  { icon: 'tabler-map-pin', title: 'Location' },
-  { icon: 'tabler-bell-ringing', title: 'Notifications' },
+
+  // { icon: 'tabler-shopping-cart', title: 'Checkout' },
+  // { icon: 'tabler-discount', title: 'Shipping & Delivery' },
+  // { icon: 'tabler-map-pin', title: 'Location' },
+  // { icon: 'tabler-bell-ringing', title: 'Notifications' },
 ]
 
 const activeTab = ref(null)
@@ -52,29 +53,33 @@ const activeTab = ref(null)
         class="disable-tab-transition"
         :touch="false"
       >
-        <VWindowItem>
+        <!--
+          <VWindowItem>
           <SettingsStoreDetails />
-        </VWindowItem>
+          </VWindowItem>
+        -->
 
         <VWindowItem>
           <SettingsPayment />
         </VWindowItem>
 
-        <VWindowItem>
+        <!--
+          <VWindowItem>
           <SettingsCheckout />
-        </VWindowItem>
+          </VWindowItem>
 
-        <VWindowItem>
+          <VWindowItem>
           <SettingsShippingAndDelivery />
-        </VWindowItem>
+          </VWindowItem>
 
-        <VWindowItem>
+          <VWindowItem>
           <SettingsLocations />
-        </VWindowItem>
+          </VWindowItem>
 
-        <VWindowItem>
+          <VWindowItem>
           <SettingsNotifications />
-        </VWindowItem>
+          </VWindowItem>
+        -->
       </VWindow>
     </VCol>
   </VRow>

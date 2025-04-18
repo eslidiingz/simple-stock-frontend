@@ -70,63 +70,64 @@ const deleteOrder = async (id: number) => {
 
 <template>
   <div>
-    <VCard class="mb-6">
-      <!-- 👉 Widgets  -->
+    <!--
+      <VCard class="mb-6">
       <VCardText>
-        <VRow>
-          <template
-            v-for="(data, id) in widgetData"
-            :key="id"
-          >
-            <VCol
-              cols="12"
-              sm="6"
-              md="3"
-              class="px-6"
-            >
-              <div
-                class="d-flex justify-space-between"
-                :class="$vuetify.display.xs
-                  ? id !== widgetData.length - 1 ? 'border-b pb-4' : ''
-                  : $vuetify.display.sm
-                    ? id < (widgetData.length / 2) ? 'border-b pb-4' : ''
-                    : ''"
-              >
-                <div class="d-flex flex-column">
-                  <h4 class="text-h4">
-                    {{ data.value }}
-                  </h4>
+      <VRow>
+      <template
+      v-for="(data, id) in widgetData"
+      :key="id"
+      >
+      <VCol
+      cols="12"
+      sm="6"
+      md="3"
+      class="px-6"
+      >
+      <div
+      class="d-flex justify-space-between"
+      :class="$vuetify.display.xs
+      ? id !== widgetData.length - 1 ? 'border-b pb-4' : ''
+      : $vuetify.display.sm
+      ? id < (widgetData.length / 2) ? 'border-b pb-4' : ''
+      : ''"
+      >
+      <div class="d-flex flex-column">
+      <h4 class="text-h4">
+      {{ data.value }}
+      </h4>
 
-                  <div class="text-body-1">
-                    {{ data.title }}
-                  </div>
-                </div>
+      <div class="text-body-1">
+      {{ data.title }}
+      </div>
+      </div>
 
-                <VAvatar
-                  variant="tonal"
-                  rounded
-                  size="42"
-                >
-                  <VIcon
-                    :icon="data.icon"
-                    size="26"
-                    class="text-high-emphasis"
-                  />
-                </VAvatar>
-              </div>
-            </VCol>
-            <VDivider
-              v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
-                : $vuetify.display.smAndUp ? id % 2 === 0
-                  : false"
-              vertical
-              inset
-              length="60"
-            />
-          </template>
-        </VRow>
+      <VAvatar
+      variant="tonal"
+      rounded
+      size="42"
+      >
+      <VIcon
+      :icon="data.icon"
+      size="26"
+      class="text-high-emphasis"
+      />
+      </VAvatar>
+      </div>
+      </VCol>
+      <VDivider
+      v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
+      : $vuetify.display.smAndUp ? id % 2 === 0
+      : false"
+      vertical
+      inset
+      length="60"
+      />
+      </template>
+      </VRow>
       </VCardText>
-    </VCard>
+      </VCard>
+    -->
 
     <VCard>
       <!-- 👉 Filters -->
@@ -144,12 +145,14 @@ const deleteOrder = async (id: number) => {
               style="min-inline-size: 6.25rem;"
               :items="[5, 10, 20, 50, 100]"
             />
-            <VBtn
+            <!--
+              <VBtn
               variant="tonal"
               color="secondary"
               prepend-icon="tabler-upload"
               text="Export"
-            />
+              />
+            -->
           </div>
         </div>
       </VCardText>
