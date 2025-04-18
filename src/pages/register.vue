@@ -205,22 +205,26 @@ const onRegister = async () => {
                 </RouterLink>
               </VCol>
 
-              <VCol
+              <!--
+                <VCol
                 cols="12"
                 class="d-flex align-center"
-              >
+                >
                 <VDivider />
                 <span class="mx-4">or</span>
                 <VDivider />
-              </VCol>
+                </VCol>
+              -->
 
               <!-- auth providers -->
-              <VCol
+              <!--
+                <VCol
                 cols="12"
                 class="text-center"
-              >
+                >
                 <AuthProvider />
-              </VCol>
+                </VCol>
+              -->
             </VRow>
           </VForm>
         </VCardText>

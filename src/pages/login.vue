@@ -1,5 +1,6 @@
 <!-- ❗Errors in the form are set on line 60 -->
 <script setup lang="ts">
+import { VForm } from 'vuetify/components/VForm'
 import { signIn } from '@/models/auth.model'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
@@ -11,7 +12,6 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
-import { VForm } from 'vuetify/components/VForm'
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 
@@ -168,19 +168,23 @@ const onSubmit = () => {
             Please sign-in to your account and start the adventure
           </p>
         </VCardText>
-        <VCardText>
+
+        <!--
+          <VCardText>
           <VAlert
-            color="primary"
-            variant="tonal"
+          color="primary"
+          variant="tonal"
           >
-            <p class="text-sm mb-2">
-              Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
-            </p>
-            <p class="text-sm mb-0">
-              Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p>
+          <p class="text-sm mb-2">
+          Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
+          </p>
+          <p class="text-sm mb-0">
+          Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
+          </p>
           </VAlert>
-        </VCardText>
+          </VCardText>
+        -->
+
         <VCardText>
           <VForm
             ref="refVForm"
@@ -246,22 +250,26 @@ const onSubmit = () => {
                   Create an account
                 </RouterLink>
               </VCol>
-              <VCol
+              <!--
+                <VCol
                 cols="12"
                 class="d-flex align-center"
-              >
+                >
                 <VDivider />
                 <span class="mx-4">or</span>
                 <VDivider />
-              </VCol>
+                </VCol>
+              -->
 
               <!-- auth providers -->
-              <VCol
+              <!--
+                <VCol
                 cols="12"
                 class="text-center"
-              >
+                >
                 <AuthProvider />
-              </VCol>
+                </VCol>
+              -->
             </VRow>
           </VForm>
         </VCardText>
