@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { Product } from '@/models/product.model'
 import { ImportStockMovement } from '@/models/stockMovement.model'
+import { useDialogStore } from '@/stores/dialog'
 import { useStockStore } from '@/stores/stock'
-import { useToastStore } from '@/stores/toast'
 
 interface ProductSelected extends Product {
   quantity: number
 }
 
 const stock = useStockStore()
-const toast = useToastStore()
+const dialog = useDialogStore()
 
 const headers = [
   { title: 'Product', key: 'product', sortable: false },
@@ -19,7 +19,6 @@ const headers = [
 
 const data = computed(() => stock.list)
 const productSelected = ref<ProductSelected>()
-const isConfirmModalOpen = ref<boolean>(false)
 
 const importStock = async () => {
   const dataImport = data.value.map((item: { id: string; quantity: number }) => ({
@@ -30,21 +29,24 @@ const importStock = async () => {
   const imported = await ImportStockMovement(dataImport)
 
   if (imported?.adjustment?.movementList?.length) {
-    toast.setMessage('Import product into stock is successfully.').show()
+    dialog.show({ message: 'Import product into stock is successfully.' })
     stock.clear()
   }
 }
 
 const onOpenConfirmDelete = (itemSelected: ProductSelected) => {
-  isConfirmModalOpen.value = true
+  dialog.showConfirm({
+    message: 'Are you sure you want to delete this product?',
+    onConfirm: async () => {
+      await onDelete()
+    },
+  })
   productSelected.value = itemSelected
 }
 
 const onDelete = async () => {
   if (productSelected.value?.id) {
     stock.removeFromList(productSelected.value)
-
-    isConfirmModalOpen.value = false
   }
 }
 </script>
@@ -110,9 +112,4 @@ const onDelete = async () => {
       </IconBtn>
     </template>
   </VDataTable>
-
-  <ConfirmModal
-    v-model:is-open="isConfirmModalOpen"
-    @update:submit="onDelete"
-  />
 </template>
