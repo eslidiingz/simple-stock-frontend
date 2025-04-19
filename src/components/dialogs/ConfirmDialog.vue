@@ -16,10 +16,6 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
 
 const dialog = useDialogStore()
-
-const updateModelValue = (val: boolean) => {
-  emit('update:isDialogVisible', val)
-}
 </script>
 
 <template>
@@ -27,10 +23,10 @@ const updateModelValue = (val: boolean) => {
   <VDialog
     max-width="500"
     :model-value="props.isDialogVisible"
-    @update:model-value="updateModelValue"
+    @update:model-value="emit('update:isDialogVisible', $event)"
   >
-    <VCard class="text-center px-10 py-6">
-      <VCardText>
+    <VCard>
+      <VCardText class="text-center px-10 py-6">
         <VBtn
           icon
           variant="outlined"

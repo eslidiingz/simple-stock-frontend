@@ -109,7 +109,7 @@ watch(searchQuery, newValue => {
   clearTimeout(timer)
   timer = setTimeout(() => {
     searchQueryDelay.value = newValue
-  }, 500) // 2 seconds delay
+  }, 700) // 0.7 seconds delay
 })
 </script>
 

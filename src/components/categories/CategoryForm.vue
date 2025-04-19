@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import { VForm } from 'vuetify/components/VForm'
 import { ModeType } from '@/interfaces/misc.interface'
-import type { ItemCategory } from '@/models/productCategory.model'
-
-const props = defineProps<Props>()
-const emit = defineEmits<Emit>()
+import type { ItemCategory, ProductCategory } from '@/models/productCategory.model'
+import { GetAllCategories } from '@/models/productCategory.model'
+import { VForm } from 'vuetify/components/VForm'
 
 interface Props {
   isOpen: boolean
   mode: ModeType
   title: string
   item?: ItemCategory
+  currentCategories: ProductCategory[]
 }
 
 interface Emit {
@@ -18,25 +17,48 @@ interface Emit {
   (e: 'update:submit', itemCategory: ItemCategory): void
 }
 
-const { isOpen, mode = ModeType.CREATE, title } = toRefs(props)
+const props = defineProps<Props>()
+const emit = defineEmits<Emit>()
 
 // Form
 const refForm = ref<VForm>()
 const name = ref<string>('')
 const isActive = ref<boolean | undefined>(true)
 
+const items = ref<{ title: string, value: string }[]>([])
+const selectedItem = ref()
+
+const { data: categories } = await GetAllCategories()
+
+const initCategories = async () => {
+  const currentCategoriesIds = new Set(props.currentCategories.map((category: ProductCategory) => category.id))
+  const filteredCategories = categories.filter((category: ProductCategory) => !currentCategoriesIds.has(category.id))
+
+  items.value = filteredCategories.map((category: ProductCategory) => ({ title: category.name, value: category.id }))
+}
+
 const onSave = async () => {
   const validated = await refForm.value?.validate()
 
   if (validated?.valid) {
+    const selectedCategoryId = selectedItem.value.value
+    const category = categories.find((cate: ProductCategory) => cate.id === selectedCategoryId)
+
+    items.value = items.value.filter(({ value }: { value: string}) => value !== selectedCategoryId)
+
     emit('update:isOpen', false)
-    emit('update:submit', { id: props.item?.id, name: name.value, is_active: isActive.value })
+    emit('update:submit', category)
+
+    setTimeout(() => {
+      selectedItem.value = ''
+    }, 500)
   }
 }
 
-watch(props, () => {
+watch(props, async () => {  
   if (props.mode === ModeType.CREATE) {
     name.value = ''
+    await initCategories()
   }
   else
     if (props.item) {
@@ -62,13 +84,22 @@ watch(props, () => {
         @submit.prevent="onSave"
       >
         <VCardText>
-          <AppTextField
+          <!--
+            <AppTextField
             v-model="name"
             :value="name"
             label="Category Name"
             placeholder="Category Name"
             :rules="[requiredValidator]"
             class="mb-2"
+            />
+          -->
+
+          <AppCombobox
+            v-model="selectedItem"
+            :items="items"
+            placeholder="Type some category..."
+            :rules="[requiredValidator]"
           />
 
           <VSwitch
@@ -79,9 +110,12 @@ watch(props, () => {
         </VCardText>
 
         <VCardText class="d-flex justify-end">
-          <VBtn type="submit">
+          <ButtonSave type="submit" />
+          <!--
+            <VBtn type="submit">
             Save
-          </VBtn>
+            </VBtn>
+          -->
         </VCardText>
       </VForm>
     </VCard>

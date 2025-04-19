@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export interface Dialog {
   title?: string
   message: string
+  type?: 'success' | 'error'
   onConfirm?: () => void
 }
 
@@ -16,6 +17,7 @@ export const useDialogStore = defineStore('dialog', {
       isVisible: false,
       title: '',
       message: '',
+      type: 'success',
       onConfirm: null as (() => void) | null,
     },
     confirm: {
@@ -30,7 +32,14 @@ export const useDialogStore = defineStore('dialog', {
     show({ title, message, onConfirm }: Dialog) {
       this.normal.title = title as string
       this.normal.message = message
+      this.normal.type = 'success'
       this.normal.onConfirm = onConfirm || null
+      this.normal.isVisible = true
+    },
+    error({ title, message } :Dialog ) {
+      this.normal.title = title as string
+      this.normal.message = message
+      this.normal.type = 'error'
       this.normal.isVisible = true
     },
     hide() {

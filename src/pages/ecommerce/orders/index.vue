@@ -11,6 +11,7 @@ import paypalLight from '@images/icons/payments/img/paypal-light.png'
 
 // Data table options
 const searchQuery = ref('')
+const searchQueryDelay = ref('')
 const itemsPerPage = ref<number>(10)
 const page = ref<number>(1)
 const sortBy = ref<string>()
@@ -19,7 +20,7 @@ const orderBy = ref<string>()
 // Fetch Orders
 const { data: ordersData, execute: fetchOrders } = await useApi<any>(createUrl(`${BASE_API}/orders`, {
   query: {
-    q: searchQuery,
+    code: searchQueryDelay,
     page,
     limit: itemsPerPage,
     sortBy,
@@ -59,13 +60,13 @@ const updateOptions = (options: any) => {
   orderBy.value = options.sortBy[0]?.order
 }
 
-// Delete Orders
-const deleteOrder = async (id: number) => {
-  await $api(`/apps/ecommerce/orders/${id}`, {
-    method: 'DELETE',
-  })
-  fetchOrders()
-}
+let timer: any = null
+watch(searchQuery, newValue => {
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    searchQueryDelay.value = newValue
+  }, 700) // 0.7 seconds delay
+})
 </script>
 
 <template>
@@ -273,7 +274,7 @@ const deleteOrder = async (id: number) => {
           <TablePagination
             v-model:page="page"
             :items-per-page="itemsPerPage"
-            :total-items="totalOrder"
+            :total-items="totalItem"
           />
         </template>
       </VDataTableServer>

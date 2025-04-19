@@ -1,130 +1,141 @@
 <script setup lang="ts">
-import type { TableOptions } from '@/interfaces/misc.interface'
-import { ModeType } from '@/interfaces/misc.interface'
-import { CreateProductCategory, DeleteProductCategory, type ProductCategory, UpdateProductCategory } from '@/models/productCategory.model'
+import type { TableOptions } from "@/interfaces/misc.interface";
+import { ModeType } from "@/interfaces/misc.interface";
+import {
+  AddCategoryToCompany,
+  DeleteProductCategory,
+  type ProductCategory
+} from "@/models/productCategory.model";
+import { useDialogStore } from "@/stores/dialog";
 
 const headers = [
-  { title: 'Categories', key: 'name', sortable: false },
-  // { title: 'Products', key: '_count.products', sortable: false },
-  { title: 'Status', key: 'is_active', sortable: false, align: 'center' },
-  // { title: 'Actions', key: 'actions', sortable: false, align: 'end' },
-]
+	{ title: "Categories", key: "name", sortable: false },
+	{ title: 'Products', key: '_count.products', sortable: false },
+	{ title: "Status", key: "is_active", sortable: false, align: "center" },
+	{ title: "Actions", key: "actions", sortable: false, align: "end" },
+];
 
-const mode = ref<ModeType>(ModeType.CREATE)
-const productSelected = ref<ProductCategory>()
+const mode = ref<ModeType>(ModeType.CREATE);
+const productSelected = ref<ProductCategory>();
 
-const searchQuery = ref<string>('')
-const searchQueryDelay = ref<string>('')
+const searchQuery = ref<string>("");
+const searchQueryDelay = ref<string>("");
 
 // Data table options
-const itemsPerPage = ref<number>(10)
-const page = ref<number>(1)
-const sortBy = ref<string>()
-const orderBy = ref<string>()
+const itemsPerPage = ref<number>(10);
+const page = ref<number>(1);
+const sortBy = ref<string>();
+const orderBy = ref<string>();
 
 // Modal & Notify
-const isToastVisible = ref<boolean>(false)
-const toastText = ref<string>('')
-const toastStatus = ref<string>('success')
+const dialog = useDialogStore();
+const isToastVisible = ref<boolean>(false);
+const toastText = ref<string>("");
+const toastStatus = ref<string>("success");
 
-const isAddProductModalOpen = ref<boolean>(false)
-const isLoading = ref<boolean>(false)
-const isConfirmModalOpen = ref<boolean>(false)
+const isAddProductModalOpen = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 
 // Update data table options
 const updateOptions = (options: TableOptions) => {
-  sortBy.value = options.sortBy[0]?.key
-  orderBy.value = options.sortBy[0]?.order
-}
+	sortBy.value = options.sortBy[0]?.key;
+	orderBy.value = options.sortBy[0]?.order;
+};
 
-const BASE_API = 'http://localhost:8000/api'
+const { data: categoriesData, execute: fetchCategories } = await useApi<any>(
+	createUrl(`${BASE_API}/product-categories`, {
+		query: {
+			name: searchQueryDelay,
+			page,
+			limit: itemsPerPage,
+			sortBy,
+			orderBy,
+		},
+	}),
+);
 
-const { data: categoriesData, execute: fetchCategories } = await useApi<any>(createUrl(`${BASE_API}/product-categories`, {
-  query: {
-    name: searchQueryDelay,
-    page,
-    limit: itemsPerPage,
-    sortBy,
-    orderBy,
-  },
-}))
-
-// isLoading.value = true
-
-// setTimeout(() => {
-//   isLoading.value = false
-// }, 2000)
-
-const categories = computed((): ProductCategory[] => categoriesData.value.data)
-const totalItem = computed(() => categoriesData.value.pagination.total)
+const categories = computed((): ProductCategory[] => categoriesData.value.data);
+const totalItem = computed(() => categoriesData.value.pagination.total);
 
 const onOpenModalCreateCategory = () => {
-  mode.value = ModeType.CREATE
-  productSelected.value = undefined
-  isAddProductModalOpen.value = true
-}
+	mode.value = ModeType.CREATE;
+	productSelected.value = undefined;
+	isAddProductModalOpen.value = true;
+};
 
-const handleFormCategorySubmitted = async (productCategory: ProductCategory): Promise<void> => {
-  isLoading.value = true
+const handleFormCategorySubmitted = async (
+	category: ProductCategory,
+): Promise<void> => {
+	isLoading.value = true;
 
-  if (mode.value === ModeType.CREATE) {
-    const { message } = await CreateProductCategory({ name: productCategory.name })
+	if (mode.value === ModeType.CREATE) {
+		const categoryAdded = await AddCategoryToCompany(category.id);
+    const { message } = categoryAdded
 
-    toastText.value = message
-  }
+    if ( !categoryAdded.success ) {
+      dialog.error({ message });
+      isLoading.value = false;
+      return
+    }
 
-  else if (mode.value === ModeType.EDIT) {
-    const { message } = await UpdateProductCategory(productCategory)
+    dialog.show({ message });
+	} 
 
-    toastText.value = message
-  }
+  // else if (mode.value === ModeType.EDIT) {
+	// 	const { message } = await UpdateProductCategory(productCategory);
+	// 	dialog.show({ message });
+	// }
 
-  await fetchCategories()
-  isToastVisible.value = true
-  isLoading.value = false
-}
+	await fetchCategories();
+	isLoading.value = false;
+};
 
 const onDelete = async (): Promise<void> => {
-  if (productSelected.value?.id) {
-    isLoading.value = true
+	if (productSelected.value?.id) {
+		isLoading.value = true;
 
-    const categoryDeleted = await DeleteProductCategory(productSelected.value?.id)
+		const categoryDeleted = await DeleteProductCategory(
+			productSelected.value?.id,
+		);
 
-    if (categoryDeleted.success) {
-      await fetchCategories()
-      toastText.value = categoryDeleted.message
+		if (!categoryDeleted.success) {
+      dialog.error({ message: categoryDeleted?.message?.data?.error });
+      isLoading.value = false;
+      return
+    }    
+
+    await fetchCategories();
+    dialog.show({ message: categoryDeleted.message });
+	}
+
+	isLoading.value = false;
+};
+
+const openDialogConfirmDelete = async (product: ProductCategory): Promise<void> => {
+	productSelected.value = product;
+
+  dialog.showConfirm({
+    message: "Are you sure you want to delete this category?",
+    onConfirm: async () => {
+      await onDelete()
     }
-    else {
-      toastText.value = categoryDeleted?.message?.data?.error
-    }
+  });
+};
 
-    isConfirmModalOpen.value = false
-    toastStatus.value = categoryDeleted.success ? 'success' : 'error'
-    isToastVisible.value = true
-  }
-
-  isLoading.value = false
+const hasProductUsed = (productCategory: ProductCategory) => {
+  if ( productCategory?._count === undefined || productCategory?._count?.products === undefined) 
+    return false
+  return productCategory._count.products > 0
 }
 
-const onOpenConfirmDelete = async (product: ProductCategory): Promise<void> => {
-  productSelected.value = product
-  isConfirmModalOpen.value = true
-}
+let timer: any = null;
 
-const onEditProduct = (product: ProductCategory) => {
-  productSelected.value = product
-  mode.value = ModeType.EDIT
-  isAddProductModalOpen.value = true
-}
-
-let timer: any = null
-
-watch(searchQuery, newValue => {
-  clearTimeout(timer)
-  timer = setTimeout(() => {
-    searchQueryDelay.value = newValue
-  }, 500) // 2 seconds delay
-})
+watch(searchQuery, (newValue) => {
+	clearTimeout(timer);
+	timer = setTimeout(() => {
+		searchQueryDelay.value = newValue;
+	}, 500); // 2 seconds delay
+});
 </script>
 
 <template>
@@ -145,10 +156,13 @@ watch(searchQuery, newValue => {
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
-          <AppSelect
-            v-model="itemsPerPage"
-            :items="[5, 10, 20, 25, 50]"
-          />
+          <div class="d-flex align-center">
+            <div class="text-caption me-2">Items per page:</div>
+            <AppSelect
+              v-model="itemsPerPage"
+              :items="selectItemsPerPage"
+            />
+          </div>
 
           <VBtn
             color="primary"
@@ -161,9 +175,10 @@ watch(searchQuery, newValue => {
           <CategoryForm
             v-model:isOpen="isAddProductModalOpen"
             :mode="mode"
-            :title="mode === ModeType.EDIT ? 'Edit Category' : 'Create Category'"
+            :title="mode === ModeType.EDIT ? 'Edit Category' : 'Add Category'"
             :item="productSelected"
-            @update:submit="(productCategory: ProductCategory) => handleFormCategorySubmitted(productCategory)"
+            :current-categories="categories"
+            @update:submit="category => handleFormCategorySubmitted(category)"
           />
         </div>
       </div>
@@ -193,20 +208,19 @@ watch(searchQuery, newValue => {
         </template>
 
         <!-- Actions -->
-        <!-- <template #item.actions="{ item }">
-          <IconBtn @click="onEditProduct(item)">
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
+        
+        <template #item.actions="{ item }">
           <IconBtn
-            :disabled="item._count.products"
-            @click="onOpenConfirmDelete(item)"
+            @click="openDialogConfirmDelete(item)"
+            :disabled="hasProductUsed(item)"
           >
             <VIcon
-              icon="tabler-trash"
-              size="22"
+            icon="tabler-trash"
+            size="22"
             />
           </IconBtn>
-        </template> -->
+        </template>
+       
 
         <!-- pagination -->
         <template #bottom>
@@ -220,20 +234,9 @@ watch(searchQuery, newValue => {
     </VCard>
   </div>
 
-  <ConfirmModal
-    v-model:is-open="isConfirmModalOpen"
-    @update:submit="onDelete"
-  />
-
   <Toast
     v-model:visible="isToastVisible"
     :text="toastText"
     :status="toastStatus"
   />
 </template>
-
-<style lang="scss">
-.category-table {
-  border: 1px solid black;
-}
-</style>

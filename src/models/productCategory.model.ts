@@ -5,6 +5,22 @@ export interface ProductCategory {
   created_at?: Date
   updated_at?: Date
   deleted_at?: Date
+
+  _count?: {
+    products?: number
+  }
+}
+
+export const GetAllCategories = async () => {
+  try {
+    return await $api(`${BASE_API}/product-categories/all`)
+  }
+  catch (error) {
+    return {
+      success: false,
+      message: error,
+    }
+  }
 }
 
 export const GetProductCategories = async (_params?: any) => {
@@ -65,5 +81,19 @@ export const DeleteProductCategory = async (id: string) => {
       success: false,
       message: error,
     }
+  }
+}
+
+export const AddCategoryToCompany = async (category_id: string) => {
+  try {
+    return await $api(`${BASE_API}/product-categories/add-to-company`, {
+      method: 'POST',
+      body: JSON.stringify({
+        category_id,
+      }),
+    })
+  }
+  catch (error) {
+    return error.data
   }
 }
