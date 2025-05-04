@@ -230,11 +230,17 @@ watch(searchQuery, newValue => {
 
         <!-- Status -->
         <template #item.status="{ item }">
-          <VChip
-            v-bind="resolveOrderStatus(item.status)"
-            label
-            size="small"
-          />
+          <div :class="{ 'py-1': item.tracking_code}">
+            <VChip
+              v-bind="resolveOrderStatus(item.status)"
+              label
+              size="small"
+            />
+            <small class="d-block mt-1" v-if="item.tracking_code">
+              <VIcon icon="tabler-tag" size="12" />
+              {{ item?.tracking_code }}
+            </small>
+          </div>
         </template>
 
         <!-- Method -->

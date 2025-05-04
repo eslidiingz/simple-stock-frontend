@@ -12,6 +12,7 @@ const order = ref(data)
 
 const paymentStatusSelected = ref(order.value.payment_status)
 const shippingStatusSelected = ref(order.value.status)
+const trackingCode = ref(order.value.tracking_code)
 
 const dialog = useDialogStore()
 
@@ -20,6 +21,7 @@ const onUpdateOrder = async () => {
     ...order.value,
     payment_status: paymentStatusSelected.value,
     status: shippingStatusSelected.value,
+    tracking_code: trackingCode.value
   }
 
   const orderUpdated = await UpdateOrder(id, updateOrderData)
@@ -28,6 +30,7 @@ const onUpdateOrder = async () => {
     dialog.show({ message: orderUpdated.message })
     order.value.payment_status = paymentStatusSelected.value
     order.value.status = shippingStatusSelected.value
+    order.value.tracking_code = trackingCode.value
   }
 }
 
@@ -77,6 +80,15 @@ const onDeleteOrder = async () => {
             >
               {{ order?.status }}
             </VChip>
+
+            <VChip
+              v-if="order?.tracking_code"
+              variant="tonal"
+              label
+              size="small"
+            >
+              {{ order?.tracking_code }}
+            </VChip>
           </div>
         </div>
         <div class="text-body-1">
@@ -117,6 +129,7 @@ const onDeleteOrder = async () => {
         <OrderDetailsShippingStatus
           :order="order"
           @update:status="shippingStatusSelected = $event"
+          @update:tracking-code="trackingCode = $event"
         />
 
          
