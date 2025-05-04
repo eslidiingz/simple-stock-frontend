@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SECOND } from '@/contants/dateTime'
-import { DeleteOrder, FindOneOrder, UpdateOrder, resolveOrderPaymentStatus, resolveOrderStatus } from '@/models/order.model'
+import { DeleteOrder, FindOneOrder, OrderPaymentStatus, UpdateOrder, resolveOrderPaymentStatus, resolveOrderStatus } from '@/models/order.model'
 import { useDialogStore } from '@/stores/dialog'
 
 const route = useRoute('ecommerce-orders-id')
@@ -11,6 +11,7 @@ const { data } = await FindOneOrder(id)
 const order = ref(data)
 
 const paymentStatusSelected = ref(order.value.payment_status)
+const shippingStatusSelected = ref(order.value.status)
 
 const dialog = useDialogStore()
 
@@ -18,6 +19,7 @@ const onUpdateOrder = async () => {
   const updateOrderData = {
     ...order.value,
     payment_status: paymentStatusSelected.value,
+    status: shippingStatusSelected.value,
   }
 
   const orderUpdated = await UpdateOrder(id, updateOrderData)
@@ -25,6 +27,7 @@ const onUpdateOrder = async () => {
   if (orderUpdated?.success) {
     dialog.show({ message: orderUpdated.message })
     order.value.payment_status = paymentStatusSelected.value
+    order.value.status = shippingStatusSelected.value
   }
 }
 
@@ -87,6 +90,7 @@ const onDeleteOrder = async () => {
           color="error"
           class="me-2"
           @click="onDeleteOrder"
+          v-if="order.payment_status !== OrderPaymentStatus.PAID"
         >
           Delete Order
         </VBtn>
@@ -110,6 +114,12 @@ const onDeleteOrder = async () => {
         />
 
         <!-- 👉 Shipping Activity -->
+        <OrderDetailsShippingStatus
+          :order="order"
+          @update:status="shippingStatusSelected = $event"
+        />
+
+         
         <!--
           <VCard title="Shipping Activity">
           <VCardText>

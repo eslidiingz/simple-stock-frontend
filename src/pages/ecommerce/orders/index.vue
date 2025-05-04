@@ -239,7 +239,7 @@ watch(searchQuery, newValue => {
 
         <!-- Method -->
         <template #item.method="{ item }">
-          <div class="d-flex align-center">
+          <div class="d-flex align-center text-uppercase">
             {{ item.payment_code }}
           </div>
         </template>
