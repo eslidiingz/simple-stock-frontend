@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
-import { useDialogStore } from './stores/dialog'
-import Toast from '@/components/Toast.vue'
-import BuyNow from '@core/components/BuyNow.vue'
-import ScrollToTop from '@core/components/ScrollToTop.vue'
 import initCore from '@core/initCore'
 import { initConfigStore, useConfigStore } from '@core/stores/config'
 import { hexToRgb } from '@layouts/utils'
+import { useTheme } from 'vuetify'
+import { useDialogStore } from './stores/dialog'
 
 import { useToastStore } from '@/stores/toast'
 

@@ -1,8 +1,8 @@
-import type { Router } from 'vue-router'
 import { layoutConfig } from '@layouts/config'
 import { AppContentLayoutNav } from '@layouts/enums'
 import { useLayoutConfigStore } from '@layouts/stores/config'
 import type { NavGroup, NavLink, NavLinkProps } from '@layouts/types'
+import type { Router } from 'vue-router'
 
 export const openGroups = ref<string[]>([])
 
@@ -57,7 +57,10 @@ export const isNavLinkActive = (link: NavLink, router: Router) => {
     return false
 
   return matchedRoutes.some(route => {
-    return route.name === resolveRoutedName || route.meta.navActiveLink === resolveRoutedName
+
+    return route.name === resolveRoutedName
+     || route.meta.navActiveLink === resolveRoutedName 
+     || route.name?.startsWith(resolveRoutedName)
   })
 }
 
