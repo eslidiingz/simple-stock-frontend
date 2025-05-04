@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Order } from '@/models/order.model'
+import type { Order } from '@/models/order.model';
 
 interface Props {
   order: Order
@@ -47,11 +47,11 @@ const headers = [
           Order Details
         </h5>
       </template>
-      <template #append>
+      <!-- <template #append>
         <div class="text-base font-weight-medium text-primary cursor-pointer">
           Edit
         </div>
-      </template>
+      </template> -->
     </VCardItem>
 
     <VDivider />

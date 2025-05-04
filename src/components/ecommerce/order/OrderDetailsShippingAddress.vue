@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Order } from '@/models/order.model'
+import type { Order } from '@/models/order.model';
 
 interface Props {
   order: Order
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
   <VCard class="mb-6">
     <VCardItem>
       <VCardTitle>Shipping Address</VCardTitle>
-      <template #append>
+      <!-- <template #append>
         <div class="d-flex align-center justify-space-between">
           <div
             class="text-base font-weight-medium text-primary cursor-pointer"
@@ -21,7 +21,7 @@ const props = defineProps<Props>()
             Edit
           </div>
         </div>
-      </template>
+      </template> -->
     </VCardItem>
 
     <VCardText>

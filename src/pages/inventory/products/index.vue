@@ -240,7 +240,7 @@ watch(searchQuery, newValue => {
             <VIcon icon="tabler-edit" />
           </IconBtn>
 
-          <IconBtn @click="onOpenConfirmDelete(item)">
+          <IconBtn @click="onOpenConfirmDelete(item)" :disabled="item.stock > 0">
             <VIcon
               icon="tabler-trash"
               size="22"

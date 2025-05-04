@@ -402,7 +402,7 @@ declare module 'vue' {
     Shortcuts: typeof import('./src/@core/components/Shortcuts.vue')['default']
     StockImportForm: typeof import('./src/components/inventory/StockImportForm.vue')['default']
     StockImportTable: typeof import('./src/components/inventory/StockImportTable.vue')['default']
-    StockMoveentHeader: typeof import('./src/components/inventory/StockMoveentHeader.vue')['default']
+    StockMovementHeader: typeof import('./src/components/inventory/StockMovementHeader.vue')['default']
     StockMovementTable: typeof import('./src/components/inventory/StockMovementTable.vue')['default']
     TablePagination: typeof import('./src/@core/components/TablePagination.vue')['default']
     TheCustomizer: typeof import('./src/@core/components/TheCustomizer.vue')['default']

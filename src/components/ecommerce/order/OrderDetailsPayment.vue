@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Order } from '@/models/order.model'
-import type { PaymentMethod } from '@/models/paymentMethod.model'
-import { GetPaymentMethods } from '@/models/paymentMethod.model'
+import type { Order } from '@/models/order.model';
+import type { PaymentMethod } from '@/models/paymentMethod.model';
+import { GetPaymentMethods } from '@/models/paymentMethod.model';
 
 interface Props {
   order: Order
@@ -35,7 +35,7 @@ const onStatusChanged = () => {
   <VCard class="mb-6">
     <VCardItem>
       <VCardTitle>Payment</VCardTitle>
-      <template #append>
+      <!-- <template #append>
         <div class="d-flex align-center justify-space-between">
           <div
             class="text-base font-weight-medium text-primary cursor-pointer"
@@ -44,7 +44,7 @@ const onStatusChanged = () => {
             Edit
           </div>
         </div>
-      </template>
+      </template> -->
     </VCardItem>
 
     <VCardText>

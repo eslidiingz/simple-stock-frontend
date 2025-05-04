@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { VForm } from 'vuetify/components/VForm'
 import { ModeType } from '@/interfaces/misc.interface'
 import type { Product, ProductCreate, ProductUpdate } from '@/models/product.model'
 import { CreateProduct, UpdateProduct } from '@/models/product.model'
 import type { ProductCategory } from '@/models/productCategory.model'
 import { GetProductCategories } from '@/models/productCategory.model'
+import { useDialogStore } from '@/stores/dialog'
+import { VForm } from 'vuetify/components/VForm'
 
 interface Props {
   mode?: ModeType
@@ -12,9 +13,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 const product = ref(props.product || {} as Product)
-
 // const product = computed(() => props.product)
 const mode = computed(() => props.mode || ModeType.CREATE)
 
@@ -29,7 +28,7 @@ interface ProductFormObject {
 }
 
 const refForm = ref<VForm | null>(null)
-
+console.log(product.value, typeof product.value, )
 const form = ref<ProductFormObject>({
   name: product.value?.name || undefined,
   category_id: product.value?.category_id || undefined,
@@ -37,7 +36,7 @@ const form = ref<ProductFormObject>({
   code: product.value?.code || undefined,
   price: product.value?.price || undefined,
   image: product.value?.image || undefined,
-  is_active: product.value ? product.value?.is_active : true,
+  is_active: Object.keys(product.value).length > 0 ? product.value?.is_active : true,
 })
 
 const selectedFile = ref(null)
@@ -49,9 +48,7 @@ const categories = computed(() => categoriesData.map((category: ProductCategory)
 
 const errors = ref()
 
-const isToastVisible = ref<boolean>(false)
-const toastText = ref<string>('')
-const toastStatus = ref<string>('success')
+const dialog = useDialogStore()
 
 /** Handler functions */
 const handleFileChange = event => {
@@ -82,7 +79,6 @@ const handleCreateProduct = async () => {
 
   const created = await CreateProduct(data)
 
-  console.log('%c%s', 'background: #04b8f4; color: #000000', '🚀 ~ handleCreateProduct ~ created:', created)
   if (created.error) {
     errors.value = {}
 
@@ -104,9 +100,7 @@ const handleCreateProduct = async () => {
   }
 
   if (created.success) {
-    toastText.value = created.message
-    isToastVisible.value = true
-
+    dialog.show({ message: created.message })
     resetForm()
   }
 }
@@ -141,8 +135,7 @@ const handleUpdateProduct = async () => {
   }
 
   if (updated.success) {
-    toastText.value = updated.message
-    isToastVisible.value = true
+    dialog.show({ message: updated.message })
   }
 }
 
@@ -327,12 +320,6 @@ const handleSubmit = async () => {
       </VRow>
     </div>
   </VForm>
-
-  <Toast
-    v-model:visible="isToastVisible"
-    :text="toastText"
-    :status="toastStatus"
-  />
 </template>
 
 <style lang="scss" scoped>

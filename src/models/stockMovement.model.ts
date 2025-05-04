@@ -12,8 +12,16 @@ export interface StockMovement {
 }
 
 export enum MovementType {
-  STOCK_IN = 'STOCK_IN',
-  STOCK_OUT = 'STOCK_OUT',
+  PURCHASE = 'PURCHASE', // ซื้อเข้า
+  SALE = 'SALE', // ขายออก
+  STOCK_IN = 'STOCK_IN', // เติมสต็อก
+  STOCK_OUT = 'STOCK_OUT', // ตัดสต็อก
+  TRANSFER_IN = 'TRANSFER_IN', // รับจากคลังอื่น
+  TRANSFER_OUT = 'TRANSFER_OUT', // ส่งออกไปคลังอื่น
+  ADJUSTMENT = 'ADJUSTMENT', // ปรับยอด
+  RETURN_SALE = 'RETURN_SALE', // ลูกค้าคืนสินค้า
+  RETURN_PURCHASE = 'RETURN_PURCHASE', // คืนของให้ supplier
+
 }
 
 export interface StockMovementCreate {

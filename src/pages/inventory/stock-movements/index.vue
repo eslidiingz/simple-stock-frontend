@@ -5,7 +5,7 @@
 <template>
   <VCard>
     <VCardText>
-      <StockMoveentHeader />
+      <StockMovementHeader />
     </VCardText>
 
     <VDivider />

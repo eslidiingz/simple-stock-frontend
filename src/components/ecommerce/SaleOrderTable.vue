@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { CreateSaleOrder } from '../../models/order.model'
 import { useSaleStore } from '@/stores/sale'
 import { useToastStore } from '@/stores/toast'
+import { CreateSaleOrder } from '../../models/order.model'
 
 const sale = useSaleStore()
 const toast = useToastStore()
@@ -74,6 +74,8 @@ const onCheckout = async () => {
         <AppTextField
           v-model.number="item.quantity"
           type="number"
+          min="1"
+          :max="item.stock"
           style="inline-size: 100px;"
         />
       </template>

@@ -10,6 +10,29 @@ export interface DialogProps {
 
 const props = defineProps<DialogProps>()
 const dialog = useDialogStore()
+
+const iconDialog = computed(() => {
+  switch (dialog.normal.type) {
+    case 'info':
+      return 'tabler-info-small'
+    case 'error':
+      return 'tabler-x'
+    default:
+      return 'tabler-check'
+  }
+})
+
+const colorDialog = computed(() => {
+  switch (dialog.normal.type) {
+    case 'info':
+      return 'info'
+    case 'error':
+      return 'error'
+    default:
+      return 'success'
+  }
+})
+
 </script>
 
 <template>
@@ -23,13 +46,15 @@ const dialog = useDialogStore()
         <VBtn
           icon
           variant="outlined"
-          :color="dialog.normal.type === 'error' ? 'error' : 'success'"
+          :color="colorDialog"
           class="my-4"
           style=" block-size: 88px;inline-size: 88px; pointer-events: none;"
         >
+          <span class="text-5xl" v-if="dialog.normal.type === 'info'">!</span>
           <VIcon
-            :icon="dialog.normal.type === 'error' ? 'tabler-x' : 'tabler-check'"
+            :icon="iconDialog"
             size="38"
+            v-else
           />
         </VBtn>
 
@@ -40,7 +65,7 @@ const dialog = useDialogStore()
         <p>{{ dialog.normal.message }}</p>
 
         <VBtn
-          :color="dialog.normal.type === 'error' ? 'error' : 'success'"
+          :color="colorDialog"
           @click="dialog.dialogConfirm()"
         >
           Ok

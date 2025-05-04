@@ -24,6 +24,19 @@ const { data: stockMovementsData, execute: fetchStockMovements } = await useApi<
 
 const stockMovements = computed((): StockMovement[] => stockMovementsData.value.data)
 const totalItem = computed(() => stockMovementsData.value.pagination.total)
+
+
+const resolveMovementType = (type: string) => {
+  const stockIncrease = [MovementType.STOCK_IN, MovementType.ADJUSTMENT] as string[]
+
+  const increase = stockIncrease.find(t => t === type)
+
+  return {
+    icon: increase ? 'tabler-arrow-up' : 'tabler-arrow-down',
+    color: increase ? 'success' : 'error',
+  }
+}
+
 </script>
 
 <template>
@@ -57,13 +70,13 @@ const totalItem = computed(() => stockMovementsData.value.pagination.total)
 
     <template #item.movement_type="{ item }">
       <VChip
-        :color="item.movement_type === MovementType.STOCK_IN ? 'success' : 'error'"
+        :color="resolveMovementType(item.movement_type)?.color"
         :label="false"
         size="small"
       >
         <VIcon
           start
-          :icon="item.movement_type === MovementType.STOCK_IN ? 'tabler-arrow-up' : 'tabler-arrow-down'"
+          :icon="resolveMovementType(item.movement_type)?.icon"
         />
         {{ item.movement_type }}
       </VChip>
