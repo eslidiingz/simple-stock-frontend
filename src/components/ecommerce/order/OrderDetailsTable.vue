@@ -33,9 +33,9 @@ const total = props.order.grand_total
 
 const headers = [
   { title: 'Product', key: 'product', sortable: false },
-  { title: 'Price', key: 'price', sortable: false },
-  { title: 'Quantity', key: 'quantity', sortable: false },
-  { title: 'Total', key: 'total', sortable: false },
+  { title: 'Price', key: 'price', sortable: false, align: 'end' },
+  { title: 'Quantity', key: 'quantity', sortable: false, align: 'end' },
+  { title: 'Total', key: 'total', sortable: false, align: 'end' },
 ]
 </script>
 
@@ -80,12 +80,16 @@ const headers = [
         </div>
       </template>
 
+      <template #item.price="{ item }">
+        {{ formatNumber(item.price) }}
+      </template>
+
       <template #item.quantity="{ item }">
         {{ item.quantity }}
       </template>
 
       <template #item.total="{ item }">
-        {{ item.price * item.quantity }}
+        {{ formatNumber(item.price * item.quantity) }}
       </template>
 
       <template #item.action="{ item }">
@@ -111,7 +115,7 @@ const headers = [
                 Subtotal:
               </td>
               <td class="font-weight-medium text-right">
-                {{ subTotal }}
+                {{ formatNumber(subTotal) }}
               </td>
             </tr>
             <!--
@@ -127,7 +131,7 @@ const headers = [
             <tr>
               <td>Shipping: </td>
               <td class="font-weight-medium text-right">
-                {{ shipping }}
+                {{ formatNumber(shipping) }}
               </td>
             </tr>
             <tr>
@@ -135,7 +139,7 @@ const headers = [
                 Total:
               </td>
               <td class="font-weight-medium text-right">
-                {{ total }}
+                {{ formatNumber(total) }}
               </td>
             </tr>
           </tbody>

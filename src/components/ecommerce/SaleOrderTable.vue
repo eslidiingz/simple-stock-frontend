@@ -70,6 +70,10 @@ const onCheckout = async () => {
         </div>
       </template>
 
+      <template #item.price="{ item }">
+        {{ formatNumber(item.price) }}
+      </template>
+
       <template #item.quantity="{ item }">
         <AppTextField
           v-model.number="item.quantity"
@@ -81,7 +85,7 @@ const onCheckout = async () => {
       </template>
 
       <template #item.total="{ item }">
-        {{ item.price * item.quantity }}
+        {{ formatNumber(item.price * item.quantity) }}
       </template>
 
       <template #item.action="{ item }">
@@ -107,7 +111,7 @@ const onCheckout = async () => {
                 Subtotal:
               </td>
               <td class="font-weight-medium text-right">
-                {{ subTotal }}
+                {{ formatNumber(subTotal) }}
               </td>
             </tr>
             <!--
@@ -123,7 +127,7 @@ const onCheckout = async () => {
             <tr>
               <td>Shipping: </td>
               <td class="font-weight-medium text-right">
-                {{ shipping }}
+                {{ formatNumber(shipping) }}
               </td>
             </tr>
             <tr>
@@ -131,7 +135,7 @@ const onCheckout = async () => {
                 Total:
               </td>
               <td class="font-weight-medium text-right">
-                {{ total }}
+                {{ formatNumber(total) }}
               </td>
             </tr>
           </tbody>

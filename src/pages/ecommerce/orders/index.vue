@@ -6,7 +6,6 @@ import masterCardLight from '@images/icons/payments/img/mastercard.png'
 import paypalDark from '@images/icons/payments/img/paypal-dark.png'
 import paypalLight from '@images/icons/payments/img/paypal-light.png'
 
-// import { formatNumber } from '../../utils/number'
 // import { formatDate } from '../../utils/date'
 
 // Data table options
@@ -45,7 +44,7 @@ const paypal = useGenerateImageVariant(paypalLight, paypalDark)
 const headers = [
   { title: 'Order', key: 'order' },
   { title: 'Product', key: 'product' },
-  { title: 'Price', key: 'grand_total' },
+  { title: 'Price', key: 'grand_total', align: 'end' },
   { title: 'Customers', key: 'customers' },
   { title: 'Payment', key: 'payment', sortable: false },
   { title: 'Status', key: 'status' },
@@ -187,8 +186,8 @@ watch(searchQuery, newValue => {
           <small class="d-block">{{ item.product_count_items }} Items</small>
         </template>
 
-        <!-- Order price -->
-        <template #item.price="{ item }">
+        <!-- Order grand total price -->
+        <template #item.grand_total="{ item }">
           {{ formatNumber(item.grand_total) }}
         </template>
 

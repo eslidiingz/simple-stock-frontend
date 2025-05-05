@@ -55,3 +55,7 @@ export const formatDateToMonthShort = (value: string, toTimeForCurrentDay = true
 }
 
 export const prefixWithPlus = (value: number) => value > 0 ? `+${value}` : value
+
+export const formatNumber = (num: number, digits: number = 2): string => {
+  return Number(num).toFixed(digits).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
