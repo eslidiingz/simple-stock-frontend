@@ -20,10 +20,22 @@ export const $api = ofetch.create({
 
     if (response?.status === 401) {
       const router = useRouter()
-      const accessToken = useCookie('accessToken')
+      // const accessToken = useCookie('accessToken')
+      // accessToken.value = null
 
-      accessToken.value = null
-      router.replace('/login')
+      // Remove "accessToken" from cookie
+      useCookie('accessToken').value = null
+
+      // Remove "userData" from cookie
+      useCookie('userData').value = null
+
+      // Remove "userAbilities" from cookie
+      useCookie('userAbilityRules').value = null
+
+      // Redirect to login page
+      window.location.href = '/login'
+      
+      // router.replace('/login')
     }
   },
 })

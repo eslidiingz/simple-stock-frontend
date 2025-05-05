@@ -25,7 +25,6 @@ export const useApi = createFetch({
     },
     afterFetch(ctx) {
       const { data, response } = ctx
-
       // Parse data if it's JSON
 
       let parsedData = null
@@ -37,6 +36,25 @@ export const useApi = createFetch({
       }
 
       return { data: parsedData, response }
+    },
+
+    onFetchError({ data, response, error }) {
+      if ( response?.status === 401 ) {
+        console.error('Unauthorized. Redirect to login.')
+
+        // Remove "accessToken" from cookie
+        useCookie('accessToken').value = null
+
+        // Remove "userData" from cookie
+        useCookie('userData').value = null
+
+        // Remove "userAbilities" from cookie
+        useCookie('userAbilityRules').value = null
+
+        // Redirect to login page
+        window.location.href = '/login'
+      }
+      return { data, response, error }
     },
   },
 })
