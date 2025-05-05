@@ -1,6 +1,9 @@
 <script setup>
+import { GetPaymentMethods, UpdatePaymentMethodList } from '@/models/paymentMethod.model'
+import { useDialogStore } from '@/stores/dialog'
 import { ref } from 'vue'
-import { GetPaymentMethods } from '../../../models/paymentMethod.model'
+
+
 
 // const paymentMethods = ref([
 //   { id: 'transfer', label: 'โอนเงิน', fee: 0, active: true, note: 'ฟรีค่าจัดส่ง' },
@@ -16,10 +19,13 @@ const shipping = ref({
 
 const { data: paymentMethodsData } = await GetPaymentMethods()
 
-const paymentMethods = computed(() => paymentMethodsData)
+const paymentMethods = ref(paymentMethodsData)
+// const paymentMethods = computed(() => paymentMethodsData)
 
 const isSettingPaymentDialogVisible = ref(false)
 const selectedPaymentType = ref('')
+
+const dialog = useDialogStore()
 
 // const addPaymentMethod = () => {
 //   paymentMethods.value.push({ id: '', label: '', fee: 0, active: true, note: '' })
@@ -29,16 +35,17 @@ const selectedPaymentType = ref('')
 //   paymentMethods.value.splice(index, 1)
 // }
 
-// const saveSettings = () => {
-//   const payload = {
-//     payment_methods: paymentMethods.value,
-//     shipping: shipping.value,
-//   }
+const saveSettings = async () => {
 
-//   console.log('Saving settings:', payload)
-
-//   // TODO: Replace with API call
-// }
+  const paymentListUpdated = await UpdatePaymentMethodList(paymentMethods.value)
+  
+  if ( !paymentListUpdated.success ) {
+    dialog.error({ message: paymentListUpdated.message })
+    return
+  }
+  
+  dialog.show({ message: 'Settings saved successfully' })
+}
 
 const updateSelectedPaymentType = paymentType => {
   selectedPaymentType.value = paymentType
@@ -110,27 +117,6 @@ const updateSelectedPaymentType = paymentType => {
               </VCol>
             -->
           </VRow>
-
-          <!--
-            <VTextField
-            v-model.number="method.fee"
-            type="number"
-            label="Fee (฿)"
-            class="me-2"
-            />
-            <VTextField
-            v-model="method.note"
-            label="Note (optional)"
-            class="me-2"
-            />
-            <VBtn
-            icon
-            color="error"
-            @click="removePaymentMethod(index)"
-            >
-            <VIcon icon="tabler-trash" />
-            </VBtn>
-          -->
         </div>
 
         <!--

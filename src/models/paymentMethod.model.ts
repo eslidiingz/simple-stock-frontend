@@ -15,6 +15,12 @@ export interface PaymentMethod {
   payment_type?: PaymentType
 }
 
+export interface UpdatePaymentMethod {
+  id: string
+  fee: number
+  note?: string
+}
+
 export const GetPaymentMethods = async (_params?: any) => {
   try {
     return await $api(`${BASE_API}/payment-methods${objectToQueryString(_params)}`)
@@ -24,5 +30,16 @@ export const GetPaymentMethods = async (_params?: any) => {
       success: false,
       message: error,
     }
+  }
+}
+
+export const UpdatePaymentMethodList = async (updatePaymentMethods: UpdatePaymentMethod[]) => {
+  try {
+    return await $api(`${BASE_API}/payment-methods`, {
+      method: 'PUT',
+      body: JSON.stringify(updatePaymentMethods),
+    })
+  } catch ( error ) {
+    return { success: false, message: error }
   }
 }
